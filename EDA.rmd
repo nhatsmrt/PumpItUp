@@ -1,0 +1,55 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(ggplot2)
+library(ggmap)
+library(leaflet)
+library(dplyr)
+library(tools)
+```
+
+```{r}
+df_train_features <- read.csv("./Data/train.csv")
+df_train_label <- read.csv("./Data/train_label.csv")
+df_train <- df_train_features %>% left_join(
+  df_train_label,
+  by = "id"
+)
+
+df_train_sampled = head(df_train, 100)
+
+View(df_train)
+View(df_train_label)
+```
+
+```{r}
+factor_levels <- 
+  toTitleCase(levels(df_train_label$status_group))
+pal <- colorFactor(
+  palette = c("green", "yellow", "red"),
+  levels = levels(df_train_label$status_group)
+)
+
+leaflet() %>% 
+  addProviderTiles("CartoDB") %>% 
+  #setView(lat = df_train[1, 'longitude'], lng = df_train[1, 'longitude'], zoom = 6) %>% 
+  addCircleMarkers(
+    data = df_train_sampled,
+    lat = ~latitude, 
+    lng = ~longitude,
+    radius = 3,
+    color = ~pal(status_group)
+  ) %>% 
+  addLegend(
+    position = "bottomright",
+    pal = pal,
+    values = levels(df_train_label$status_group),
+    title = "Status"
+  )
+
+```
+
