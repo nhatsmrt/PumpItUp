@@ -40,7 +40,7 @@ shinyServer(function(input, output) {
         data = df_train_sampled(),
         lat = ~latitude, 
         lng = ~longitude,
-        radius = 3,
+        radius = 0.5,
         color = ~pal(status_group),
         label = ~status_group
       ) %>% 
