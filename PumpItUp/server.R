@@ -53,5 +53,12 @@ shinyServer(function(input, output) {
       )
   }) 
   
+  output$download_data <- downloadHandler(
+    filename = "data.csv",
+    content <- function(file) {
+      write.csv(df_train_sampled(), file, row.names = FALSE)
+    }
+  )
+  
 
 })

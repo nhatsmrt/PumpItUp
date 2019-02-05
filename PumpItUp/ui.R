@@ -29,7 +29,8 @@ shinyUI(fluidPage(
                    "Number of Wells Displayed:",
                    min = 1,
                    max = 1000,
-                   value = 30)
+                   value = 30),
+       downloadButton("download_data", "Download")
     ),
     
     # Show a plot of the generated distribution
