@@ -32,7 +32,17 @@ pal <- colorFactor(
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-  df_train_sampled = reactive({head(df_train, input$wells)})
+  df_train_sampled = reactive({
+    head(
+      df_train %>% 
+        filter(status_group %in% input$type) %>% 
+        select(
+          id, amount_tsh, funder, gps_height, installer, wpt_name, num_private,
+          longitude, latitude, basin, subvillage, region, status_group
+        ), 
+      input$wells
+    )
+  })
   output$map <- renderLeaflet({
     leaflet() %>% 
       addProviderTiles("CartoDB") %>% 
@@ -59,6 +69,10 @@ shinyServer(function(input, output) {
       write.csv(df_train_sampled(), file, row.names = FALSE)
     }
   )
+  
+  output$table <- DT::renderDataTable({
+    df_train_sampled()
+  })
   
 
 })

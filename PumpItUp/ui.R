@@ -14,6 +14,7 @@ library(ggmap)
 library(leaflet)
 library(dplyr)
 library(tools)
+library(DT)
 
 
 # Define UI for application that draws a histogram
@@ -30,12 +31,25 @@ shinyUI(fluidPage(
                    min = 1,
                    max = 1000,
                    value = 30),
-       downloadButton("download_data", "Download")
+       downloadButton("download_data", "Download"),
+       selectInput(
+         "type", 
+         "Display",
+         choices = c(
+           "Functional" = "functional", 
+           "Functional, but need repair" = "functional needs repair", 
+           "Non-Functional" = "non functional"
+          ),
+         selected = "non functional",
+         multiple = TRUE
+        )
     ),
     
     # Show a plot of the generated distribution
     mainPanel(
-      leafletOutput("map")
+      leafletOutput("map"),
+      DT::dataTableOutput("table")
     )
   )
 ))
+
